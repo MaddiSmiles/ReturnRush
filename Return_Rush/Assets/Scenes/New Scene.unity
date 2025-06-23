@@ -250,6 +250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
+  dashPower: 50
 --- !u!114 &6629359
 MonoBehaviour:
   m_ObjectHideFlags: 0
