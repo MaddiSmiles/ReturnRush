@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class Player_Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     //fields for checking dash
