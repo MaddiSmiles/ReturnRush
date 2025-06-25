@@ -186,8 +186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   target: {fileID: 0}
-  rotationSpeed: 50
-  pointA: {fileID: 0}
+  rotationSpeed: 150
+  pointA: {fileID: 264922743169325738}
 --- !u!50 &6000319226115243552
 Rigidbody2D:
   serializedVersion: 4
