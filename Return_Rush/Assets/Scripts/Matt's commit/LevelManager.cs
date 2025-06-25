@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
         {
             GameObject enemy = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity);
             enemy.GetComponent<EnemyChase>().speed = baseEnemySpeed + (currentLevel * 0.2f); // Increase speed slightly
+            enemy.transform.Rotate(0, 0, 180);
         }
 
         // Optional: spawn a lineman every 3rd level
