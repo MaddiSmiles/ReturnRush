@@ -11,10 +11,10 @@ public class LevelManager : MonoBehaviour
     public Transform playerStartPoint;
     public GameObject player;
 
-    private int currentLevel = 1;
+    protected int currentLevel = 1;
     private float baseEnemySpeed = 3f;
 
-    void Start()
+    void Awake()
     {
         StartLevel();
     }
@@ -51,7 +51,12 @@ public class LevelManager : MonoBehaviour
     {
         currentLevel++;
         Debug.Log("Current Level: " + currentLevel);
-
+        ScoreManager.instance.addScore();
         StartLevel();
+    }
+    //get method for currentlevel
+    public int getCurrentLevel()
+    {
+        return currentLevel;
     }
 }
