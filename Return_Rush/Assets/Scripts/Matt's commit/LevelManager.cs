@@ -50,6 +50,8 @@ public class LevelManager : MonoBehaviour
     public void NextLevel()
     {
         currentLevel++;
+        Debug.Log("Current Level: " + currentLevel);
+
         StartLevel();
     }
 }
