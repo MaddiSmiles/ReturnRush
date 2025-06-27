@@ -11,11 +11,12 @@ public class Player_Movement : MonoBehaviour
     //If we want to implement a trail thing
     //[SerializeField] private TrailRenderer tr;
     private bool canDash = true;
-    private bool isDashing;
+    private bool isDashing = false;
     private float dashingTime = 0.2f;
     private float dashingCooldown = 1f;
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    private Vector2 lastMoveDirection;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,16 +28,15 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //move object from input
-        rb.velocity = moveInput * moveSpeed;
-        //implementing DASH
-        if (Input.GetKeyDown("q") && canDash)
+        if (!isDashing)
         {
-            StartCoroutine(Dash());
-        }
-        if (isDashing)
-        {
-            return;
+            rb.velocity = moveInput * moveSpeed;
+
+            if (moveInput != Vector2.zero)
+                lastMoveDirection = moveInput.normalized;
+
+            if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Space)) && canDash)
+                StartCoroutine(Dash());
         }
     }
     void FixedUpdate()
@@ -55,12 +55,14 @@ public class Player_Movement : MonoBehaviour
     //setting dash to limit player from spamming
     private IEnumerator Dash()
     {
+        if (moveInput == Vector2.zero)
+            yield break;
         canDash = false;
         isDashing = true;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //this moves player forward
-        rb.velocity = new Vector2(0f, transform.localScale.y * dashPower);
+        rb.velocity = moveInput.normalized * dashPower;
         ///trail?
         /// tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
