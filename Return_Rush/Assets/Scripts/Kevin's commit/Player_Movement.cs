@@ -10,6 +10,9 @@ public class Player_Movement : MonoBehaviour
     [SerializeField] private float dashPower = 10f;
     //If we want to implement a trail thing
     //[SerializeField] private TrailRenderer tr;
+    [SerializeField] private float maxDashEnergy = 1f;
+    [SerializeField] private float dashRechargeRate = 0.25f; // per second
+    private float currentDashEnergy;
     private bool canDash = true;
     private bool isDashing = false;
     private float dashingTime = 0.2f;
@@ -22,6 +25,7 @@ public class Player_Movement : MonoBehaviour
     {
         //Get the Rigidbody for object attached to script
         rb = GetComponent<Rigidbody2D>();
+        currentDashEnergy = maxDashEnergy;
 
     }
 
@@ -35,9 +39,19 @@ public class Player_Movement : MonoBehaviour
             if (moveInput != Vector2.zero)
                 lastMoveDirection = moveInput.normalized;
 
-            if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.Space)) && canDash)
+            if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.LeftShift)) && canDash && currentDashEnergy >= 1f)
+            {
                 StartCoroutine(Dash());
+            }
+
         }
+        // Recharge dash energy over time
+        if (currentDashEnergy < maxDashEnergy)
+        {
+            currentDashEnergy += dashRechargeRate * Time.deltaTime;
+            currentDashEnergy = Mathf.Min(currentDashEnergy, maxDashEnergy);
+        }
+
     }
     void FixedUpdate()
     {
@@ -59,6 +73,7 @@ public class Player_Movement : MonoBehaviour
             yield break;
         canDash = false;
         isDashing = true;
+        currentDashEnergy -= 1f;
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
         //this moves player forward
@@ -72,4 +87,23 @@ public class Player_Movement : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
+
+    public float GetDashCharge()
+    {
+        return currentDashEnergy;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (isDashing && other.CompareTag("Enemy"))
+        {
+            Rigidbody2D enemyRb = other.GetComponent<Rigidbody2D>();
+            if (enemyRb != null)
+            {
+                Vector2 knockbackDir = (other.transform.position - transform.position).normalized;
+                enemyRb.AddForce(knockbackDir * 300f); // You can tweak the force value
+            }
+        }
+    }
+
 }
