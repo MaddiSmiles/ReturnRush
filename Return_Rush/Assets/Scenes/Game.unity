@@ -717,7 +717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 308}
+  m_AnchoredPosition: {x: 0, y: 359}
   m_SizeDelta: {x: 1189.8094, y: 207.3543}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &297797931
@@ -740,7 +740,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: GAME OVER
+  m_text: You've been Tackled!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d80c1edf1b680174185b0a4cbbc17894, type: 2}
   m_sharedMaterial: {fileID: 2026971699413104307, guid: d80c1edf1b680174185b0a4cbbc17894, type: 2}
@@ -767,8 +767,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 203.7
-  m_fontSizeBase: 203.7
+  m_fontSize: 172.28
+  m_fontSizeBase: 172.28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -779,7 +779,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
+  m_lineSpacing: -140.3
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1511,8 +1511,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000076294, y: 170.95}
-  m_SizeDelta: {x: 350.6449, y: 66.7383}
+  m_AnchoredPosition: {x: -0.0000076294, y: 177}
+  m_SizeDelta: {x: 518.6967, y: 72.6349}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1124273344
 MonoBehaviour:
@@ -1561,8 +1561,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 59.9
-  m_fontSizeBase: 59.9
+  m_fontSize: 76.4
+  m_fontSizeBase: 76.4
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
