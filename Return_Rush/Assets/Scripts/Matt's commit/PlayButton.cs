@@ -7,6 +7,6 @@ public class PlayButton : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("New Scene"); // Replace with your scene name
+        SceneManager.LoadScene("Game"); // Replace with your scene name
     }
 }

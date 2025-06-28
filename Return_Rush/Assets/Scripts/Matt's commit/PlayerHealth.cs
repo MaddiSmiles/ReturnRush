@@ -6,6 +6,7 @@ public class PlayerHealth : MonoBehaviour
 {
     private HashSet<GameObject> currentColliders = new HashSet<GameObject>();
     private bool isTackled = false;
+    public GameOverScreen gameOverScreen;   //retrieving gameover script
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -58,5 +59,6 @@ public class PlayerHealth : MonoBehaviour
         // You can trigger Game Over, disable movement, play animation, etc.
         // For now:
         Time.timeScale = 0; // Freeze game
+        gameOverScreen.Setup();
     }
 }
