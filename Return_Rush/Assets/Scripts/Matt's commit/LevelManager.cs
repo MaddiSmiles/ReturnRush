@@ -14,9 +14,16 @@ public class LevelManager : MonoBehaviour
     protected int currentLevel = 1;
     private float baseEnemySpeed = 3f;
 
+    private AudioSource audioSource;
+
+
+
     void Awake()
     {
         StartLevel();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.Play();
+
     }
 
     void StartLevel()
@@ -53,6 +60,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Current Level: " + currentLevel);
         ScoreManager.instance.addScore();
         StartLevel();
+        audioSource.Play(); 
     }
     //get method for currentlevel
     public int getCurrentLevel()
