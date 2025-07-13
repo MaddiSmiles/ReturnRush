@@ -1140,6 +1140,8 @@ MonoBehaviour:
   whistleClip: {fileID: 8300000, guid: 7a59def3258b07b48808bbb55be3782b, type: 3}
   footstepClip: {fileID: 8300000, guid: 2edb5c2f0cddc184ea9ab5c391f57770, type: 3}
   dashClip: {fileID: 8300000, guid: f009807ecb8fda44fad2d3cafd057695, type: 3}
+  footstepVolumef: 0.4
+  dashVolume: 1
   isGameOver: 0
 --- !u!4 &426259057
 Transform:

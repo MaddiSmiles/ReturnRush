@@ -17,14 +17,17 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
-        StartLevel();
-
+        // Reset game over flag
         if (AudioManager.instance != null)
         {
+            AudioManager.instance.isGameOver = false;
             AudioManager.instance.PlayMusic(AudioManager.instance.backgroundMusic);
-            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip); // optional whistle at start
+            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
         }
+
+        StartLevel();
     }
+
 
 
     void StartLevel()

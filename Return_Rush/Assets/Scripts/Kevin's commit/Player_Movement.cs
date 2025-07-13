@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -42,11 +42,9 @@ public class Player_Movement : MonoBehaviour
                 lastMoveDirection = moveInput.normalized;
 
             if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.LeftShift)) && canDash && currentDashEnergy >= 1f)
-            {
                 StartCoroutine(Dash());
-            }
 
-            HandleFootstepAudio();
+            HandleFootstepAudio(); // ✅ important!
         }
 
         // Recharge dash energy over time
@@ -92,7 +90,8 @@ public class Player_Movement : MonoBehaviour
 
         // Play dash sound through AudioManager
         if (AudioManager.instance != null)
-            AudioManager.instance.PlaySFX(AudioManager.instance.dashClip);
+            AudioManager.instance.PlaySFX(AudioManager.instance.dashClip, AudioManager.instance.dashVolume);
+
 
         ///trail?
         /// tr.emitting = true;
@@ -106,34 +105,35 @@ public class Player_Movement : MonoBehaviour
         canDash = true;
     }
 
-
     private void HandleFootstepAudio()
     {
-        bool isMoving = moveInput.sqrMagnitude > 0.1f;
-
-        if (AudioManager.instance == null || AudioManager.instance.footstepClip == null || AudioManager.instance.isGameOver)
+        if (AudioManager.instance == null || AudioManager.instance.footstepClip == null)
             return;
 
+        AudioSource sfx = AudioManager.instance.sfxSource;
+        bool isMoving = moveInput.sqrMagnitude > 0.1f;
 
-        AudioSource sfxSource = AudioManager.instance.sfxSource;
-
-        if (isMoving && !wasMovingLastFrame)
+        if (AudioManager.instance.isGameOver)
         {
-            if (!sfxSource.isPlaying)
+            if (sfx.isPlaying && sfx.clip == AudioManager.instance.footstepClip)
+                sfx.Stop();
+            return;
+        }
+
+        if (isMoving)
+        {
+            if (sfx.clip != AudioManager.instance.footstepClip || !sfx.isPlaying)
             {
-                sfxSource.clip = AudioManager.instance.footstepClip;
-                sfxSource.loop = true;
-                sfxSource.Play();
+                AudioManager.instance.PlayLoopingSFX(AudioManager.instance.footstepClip, AudioManager.instance.footstepVolumef); // ✅ pass volume
             }
         }
-        else if (!isMoving && wasMovingLastFrame)
+        else
         {
-            if (sfxSource.isPlaying && sfxSource.clip == AudioManager.instance.footstepClip)
-                sfxSource.Stop();
+            if (sfx.clip == AudioManager.instance.footstepClip && sfx.isPlaying)
+                sfx.Stop();
         }
-
-        wasMovingLastFrame = isMoving;
     }
+
 
     public float GetDashCharge()
     {
