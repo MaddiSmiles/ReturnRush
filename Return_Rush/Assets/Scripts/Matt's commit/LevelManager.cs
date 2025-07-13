@@ -14,30 +14,18 @@ public class LevelManager : MonoBehaviour
     protected int currentLevel = 1;
     private float baseEnemySpeed = 3f;
 
-    [Header("Audio")]
-    public AudioSource musicSource;     // 🎵 For looping background music
-    public AudioSource sfxSource;       // 📣 For whistle sound effects
-    public AudioClip musicClip;
-    public AudioClip whistleClip;
 
     void Awake()
     {
-        // Play the background music
-        if (musicSource != null && musicClip != null)
-        {
-            musicSource.clip = musicClip;
-            musicSource.loop = true;
-            musicSource.Play();
-        }
-
-        // Play whistle at game start
-        if (sfxSource != null && whistleClip != null)
-        {
-            sfxSource.PlayOneShot(whistleClip);
-        }
-
         StartLevel();
+
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.PlayMusic(AudioManager.instance.backgroundMusic);
+            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip); // optional whistle at start
+        }
     }
+
 
     void StartLevel()
     {
@@ -75,10 +63,12 @@ public class LevelManager : MonoBehaviour
         StartLevel();
 
         // Play whistle again when touchdown is scored
-        if (sfxSource != null && whistleClip != null)
+        if (AudioManager.instance != null)
         {
-            sfxSource.PlayOneShot(whistleClip);
+            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
         }
+
+
     }
 
     public int getCurrentLevel()

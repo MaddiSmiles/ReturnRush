@@ -21,12 +21,7 @@ public class Player_Movement : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 lastMoveDirection;
 
-    [SerializeField] private AudioSource footstepAudioSource;
-    [SerializeField] private AudioClip footstepClip;
-    [SerializeField] private AudioSource dashAudioSource;
-    [SerializeField] private AudioClip dashClip;
     private bool wasMovingLastFrame = false;
-
 
     // Start is called before the first frame update
     void Start()
@@ -34,7 +29,6 @@ public class Player_Movement : MonoBehaviour
         //Get the Rigidbody for object attached to script
         rb = GetComponent<Rigidbody2D>();
         currentDashEnergy = maxDashEnergy;
-
     }
 
     // Update is called once per frame
@@ -51,74 +45,92 @@ public class Player_Movement : MonoBehaviour
             {
                 StartCoroutine(Dash());
             }
-            HandleFootstepAudio();
 
+            HandleFootstepAudio();
         }
+
         // Recharge dash energy over time
         if (currentDashEnergy < maxDashEnergy)
         {
             currentDashEnergy += dashRechargeRate * Time.deltaTime;
             currentDashEnergy = Mathf.Min(currentDashEnergy, maxDashEnergy);
         }
-
     }
+
     void FixedUpdate()
     {
-       if (isDashing)
+        if (isDashing)
         {
             return;
-        } 
+        }
     }
+
     //Listens for input from player
     public void Move(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-    } 
+    }
 
     //setting dash to limit player from spamming
     private IEnumerator Dash()
     {
+        if (AudioManager.instance != null && AudioManager.instance.isGameOver)
+            yield break;
+
         if (moveInput == Vector2.zero)
             yield break;
+
         canDash = false;
         isDashing = true;
         currentDashEnergy -= 1f;
+
         float originalGravity = rb.gravityScale;
         rb.gravityScale = 0f;
+
         //this moves player forward
         rb.velocity = moveInput.normalized * dashPower;
-        if (dashAudioSource && dashClip)
-            dashAudioSource.PlayOneShot(dashClip);
+
+        // Play dash sound through AudioManager
+        if (AudioManager.instance != null)
+            AudioManager.instance.PlaySFX(AudioManager.instance.dashClip);
 
         ///trail?
         /// tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
+
         //tr.emitting = fasle;
         rb.gravityScale = originalGravity;
         isDashing = false;
+
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
+
 
     private void HandleFootstepAudio()
     {
         bool isMoving = moveInput.sqrMagnitude > 0.1f;
 
+        if (AudioManager.instance == null || AudioManager.instance.footstepClip == null || AudioManager.instance.isGameOver)
+            return;
+
+
+        AudioSource sfxSource = AudioManager.instance.sfxSource;
+
         if (isMoving && !wasMovingLastFrame)
         {
-            if (footstepAudioSource && footstepClip)
+            if (!sfxSource.isPlaying)
             {
-                footstepAudioSource.clip = footstepClip;
-                footstepAudioSource.loop = true;
-                footstepAudioSource.Play();
+                sfxSource.clip = AudioManager.instance.footstepClip;
+                sfxSource.loop = true;
+                sfxSource.Play();
             }
         }
         else if (!isMoving && wasMovingLastFrame)
         {
-            if (footstepAudioSource && footstepAudioSource.isPlaying && footstepAudioSource.clip == footstepClip)
-                footstepAudioSource.Stop();
+            if (sfxSource.isPlaying && sfxSource.clip == AudioManager.instance.footstepClip)
+                sfxSource.Stop();
         }
-
 
         wasMovingLastFrame = isMoving;
     }
@@ -140,5 +152,4 @@ public class Player_Movement : MonoBehaviour
             }
         }
     }
-
 }

@@ -60,13 +60,27 @@ public class PlayerHealth : MonoBehaviour
         isTackled = true;
         Debug.Log("Player has been tackled!");
 
-        if (audioSource && tackledSound)
+        if (AudioManager.instance != null)
         {
-            audioSource.PlayOneShot(tackledSound);
+            AudioManager audio = AudioManager.instance;
+
+            // Mark game as over to block new audio
+            audio.isGameOver = true;
+
+            // Stop background music
+            audio.StopMusic();
+
+            // Stop looping SFX (like footsteps)
+            audio.StopLoopingSFX(audio.footstepClip);
+
+            // Still allow tackle SFX to play once
+            audio.PlaySFX(audio.tackleClip);
         }
 
-        Time.timeScale = 0; // Freeze game
+        Time.timeScale = 0;
         gameOverScreen.Setup();
     }
+
+
 
 }
