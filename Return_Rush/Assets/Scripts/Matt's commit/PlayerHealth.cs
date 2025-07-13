@@ -8,6 +8,10 @@ public class PlayerHealth : MonoBehaviour
     private bool isTackled = false;
     public GameOverScreen gameOverScreen;   //retrieving gameover script
 
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip tackledSound;
+
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (isTackled) return;
@@ -56,9 +60,13 @@ public class PlayerHealth : MonoBehaviour
         isTackled = true;
         Debug.Log("Player has been tackled!");
 
-        // You can trigger Game Over, disable movement, play animation, etc.
-        // For now:
+        if (audioSource && tackledSound)
+        {
+            audioSource.PlayOneShot(tackledSound);
+        }
+
         Time.timeScale = 0; // Freeze game
         gameOverScreen.Setup();
     }
+
 }
