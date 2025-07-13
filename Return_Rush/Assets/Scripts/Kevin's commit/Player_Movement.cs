@@ -20,6 +20,14 @@ public class Player_Movement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Vector2 lastMoveDirection;
+
+    [SerializeField] private AudioSource footstepAudioSource;
+    [SerializeField] private AudioClip footstepClip;
+    [SerializeField] private AudioSource dashAudioSource;
+    [SerializeField] private AudioClip dashClip;
+    private bool wasMovingLastFrame = false;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +51,7 @@ public class Player_Movement : MonoBehaviour
             {
                 StartCoroutine(Dash());
             }
+            HandleFootstepAudio();
 
         }
         // Recharge dash energy over time
@@ -64,7 +73,7 @@ public class Player_Movement : MonoBehaviour
     public void Move(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-    }
+    } 
 
     //setting dash to limit player from spamming
     private IEnumerator Dash()
@@ -78,6 +87,9 @@ public class Player_Movement : MonoBehaviour
         rb.gravityScale = 0f;
         //this moves player forward
         rb.velocity = moveInput.normalized * dashPower;
+        if (dashAudioSource && dashClip)
+            dashAudioSource.PlayOneShot(dashClip);
+
         ///trail?
         /// tr.emitting = true;
         yield return new WaitForSeconds(dashingTime);
@@ -86,6 +98,29 @@ public class Player_Movement : MonoBehaviour
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
+    }
+
+    private void HandleFootstepAudio()
+    {
+        bool isMoving = moveInput.sqrMagnitude > 0.1f;
+
+        if (isMoving && !wasMovingLastFrame)
+        {
+            if (footstepAudioSource && footstepClip)
+            {
+                footstepAudioSource.clip = footstepClip;
+                footstepAudioSource.loop = true;
+                footstepAudioSource.Play();
+            }
+        }
+        else if (!isMoving && wasMovingLastFrame)
+        {
+            if (footstepAudioSource && footstepAudioSource.isPlaying && footstepAudioSource.clip == footstepClip)
+                footstepAudioSource.Stop();
+        }
+
+
+        wasMovingLastFrame = isMoving;
     }
 
     public float GetDashCharge()
