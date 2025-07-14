@@ -1305,7 +1305,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 368313366}
         m_TargetAssemblyTypeName: GameOverScreen, Assembly-CSharp
-        m_MethodName: ExitButton
+        m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
