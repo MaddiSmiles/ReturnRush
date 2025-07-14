@@ -6,6 +6,11 @@ TagManager:
   tags:
   - Enemy
   - Lineman
+  - EndZone
+  - 10
+  - 30
+  - 50
+  - 40
   layers:
   - Default
   - TransparentFX
