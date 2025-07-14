@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,39 +14,43 @@ public class LevelManager : MonoBehaviour
     protected int currentLevel = 1;
     private float baseEnemySpeed = 3f;
 
-    private AudioSource audioSource;
-
-
 
     void Awake()
     {
-        StartLevel();
-        audioSource = GetComponent<AudioSource>();
-        audioSource.Play();
+        // Reset game over flag
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.isGameOver = false;
+            AudioManager.instance.PlayMusic(AudioManager.instance.backgroundMusic);
+            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
+        }
 
+        StartLevel();
     }
+
+
 
     void StartLevel()
     {
-        // Move player back to start
+        // Reset player position
         player.transform.position = playerStartPoint.position;
 
-        // Clear existing enemies (if respawning)
+        // Clear existing enemies
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))
             Destroy(obj);
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Lineman"))
             Destroy(obj);
 
-        // Spawn enemies for this level
+        // Spawn enemies
         int enemiesToSpawn = Mathf.Min(currentLevel, spawnPoints.Length);
         for (int i = 0; i < enemiesToSpawn; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab, spawnPoints[i].position, Quaternion.identity);
-            enemy.GetComponent<EnemyChase>().speed = baseEnemySpeed + (currentLevel * 0.2f); // Increase speed slightly
+            enemy.GetComponent<EnemyChase>().speed = baseEnemySpeed + (currentLevel * 0.2f);
             enemy.transform.Rotate(0, 0, 180);
         }
 
-        // Optional: spawn a lineman every 3rd level
+        // Spawn lineman every 3rd level
         if (currentLevel % 3 == 0)
         {
             int linemanIndex = enemiesToSpawn % spawnPoints.Length;
@@ -60,9 +64,16 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Current Level: " + currentLevel);
         ScoreManager.instance.addScore();
         StartLevel();
-        audioSource.Play(); 
+
+        // Play whistle again when touchdown is scored
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
+        }
+
+
     }
-    //get method for currentlevel
+
     public int getCurrentLevel()
     {
         return currentLevel;
