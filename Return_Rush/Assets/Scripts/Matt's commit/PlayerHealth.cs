@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,22 +64,20 @@ public class PlayerHealth : MonoBehaviour
         {
             AudioManager audio = AudioManager.instance;
 
-            // Mark game as over to block new audio
+            // Play tackle SFX BEFORE setting game over
+            audio.PlayTackleSFX();
+
+
+            // Now mark game over and stop looping/background sounds
             audio.isGameOver = true;
-
-            // Stop background music
             audio.StopMusic();
-
-            // Stop looping SFX (like footsteps)
             audio.StopLoopingSFX(audio.footstepClip);
-
-            // Still allow tackle SFX to play once
-            audio.PlaySFX(audio.tackleClip);
         }
 
         Time.timeScale = 0;
         gameOverScreen.Setup();
     }
+
 
 
 

@@ -21,7 +21,6 @@ public class Player_Movement : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 lastMoveDirection;
 
-    private bool wasMovingLastFrame = false;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +33,8 @@ public class Player_Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Time.timeScale == 0f) return; // Prevent movement and sound while paused
+
         if (!isDashing)
         {
             rb.velocity = moveInput * moveSpeed;
@@ -72,6 +73,8 @@ public class Player_Movement : MonoBehaviour
     //setting dash to limit player from spamming
     private IEnumerator Dash()
     {
+        if (Time.timeScale == 0f) yield break; // Prevent dash if paused
+
         if (AudioManager.instance != null && AudioManager.instance.isGameOver)
             yield break;
 
@@ -124,7 +127,8 @@ public class Player_Movement : MonoBehaviour
         {
             if (sfx.clip != AudioManager.instance.footstepClip || !sfx.isPlaying)
             {
-                AudioManager.instance.PlayLoopingSFX(AudioManager.instance.footstepClip, AudioManager.instance.footstepVolumef); // ✅ pass volume
+                AudioManager.instance.PlayFootstepLoop();
+
             }
         }
         else

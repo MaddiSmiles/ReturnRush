@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour
         {
             AudioManager.instance.isGameOver = false;
             AudioManager.instance.PlayMusic(AudioManager.instance.backgroundMusic);
-            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
+            //AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
         }
 
         StartLevel();
@@ -63,16 +63,22 @@ public class LevelManager : MonoBehaviour
         currentLevel++;
         Debug.Log("Current Level: " + currentLevel);
         ScoreManager.instance.addScore();
-        StartLevel();
 
-        // Play whistle again when touchdown is scored
+        // Play whistle first
         if (AudioManager.instance != null)
-        {
-            AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
-        }
+            AudioManager.instance.PlayWhistleSFX();
 
 
+        // Delay level start slightly to let the whistle play
+        StartCoroutine(DelayedStartLevel());
     }
+
+    private IEnumerator DelayedStartLevel()
+    {
+        yield return new WaitForSecondsRealtime(0.25f); // Give time for whistle
+        StartLevel();
+    }
+
 
     public int getCurrentLevel()
     {
