@@ -20,7 +20,15 @@ public class Player_Movement : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private Vector2 lastMoveDirection;
+    private bool wasMoving = false;
 
+    private AudioSource footstepSource;
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +36,12 @@ public class Player_Movement : MonoBehaviour
         //Get the Rigidbody for object attached to script
         rb = GetComponent<Rigidbody2D>();
         currentDashEnergy = maxDashEnergy;
+        //Footstep audio
+        footstepSource = gameObject.AddComponent<AudioSource>();
+        footstepSource.clip = audioManager.steps;
+        footstepSource.loop = true;
+        footstepSource.volume = 0.5f; // Or whatever you want
+
     }
 
     // Update is called once per frame
@@ -35,17 +49,35 @@ public class Player_Movement : MonoBehaviour
     {
         if (Time.timeScale == 0f) return; // Prevent movement and sound while paused
 
+        if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.LeftShift)) && canDash && currentDashEnergy >= 1f)
+            StartCoroutine(Dash());
+
         if (!isDashing)
         {
             rb.velocity = moveInput * moveSpeed;
 
             if (moveInput != Vector2.zero)
+            {
+                // Only play footstep SFX once when movement begins
+                if (!wasMoving)
+                {
+                    wasMoving = true;
+
+                    if (!footstepSource.isPlaying)
+                        footstepSource.Play();
+                }
+
                 lastMoveDirection = moveInput.normalized;
-
-            if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.LeftShift)) && canDash && currentDashEnergy >= 1f)
-                StartCoroutine(Dash());
-
-            HandleFootstepAudio(); // ✅ important!
+            }
+            else
+            {
+                // Stop footsteps when movement ends
+                if (wasMoving)
+                {
+                    footstepSource.Stop();
+                    wasMoving = false;
+                }
+            }
         }
 
         // Recharge dash energy over time
@@ -55,6 +87,7 @@ public class Player_Movement : MonoBehaviour
             currentDashEnergy = Mathf.Min(currentDashEnergy, maxDashEnergy);
         }
     }
+
 
     void FixedUpdate()
     {
@@ -75,9 +108,6 @@ public class Player_Movement : MonoBehaviour
     {
         if (Time.timeScale == 0f) yield break; // Prevent dash if paused
 
-        if (AudioManager.instance != null && AudioManager.instance.isGameOver)
-            yield break;
-
         if (moveInput == Vector2.zero)
             yield break;
 
@@ -92,9 +122,7 @@ public class Player_Movement : MonoBehaviour
         rb.velocity = moveInput.normalized * dashPower;
 
         // Play dash sound through AudioManager
-        if (AudioManager.instance != null)
-            AudioManager.instance.PlaySFX(AudioManager.instance.dashClip, AudioManager.instance.dashVolume);
-
+        audioManager.PlaySFX(audioManager.dash);
 
         ///trail?
         /// tr.emitting = true;
@@ -108,42 +136,13 @@ public class Player_Movement : MonoBehaviour
         canDash = true;
     }
 
-    private void HandleFootstepAudio()
-    {
-        if (AudioManager.instance == null || AudioManager.instance.footstepClip == null)
-            return;
-
-        AudioSource sfx = AudioManager.instance.sfxSource;
-        bool isMoving = moveInput.sqrMagnitude > 0.1f;
-
-        if (AudioManager.instance.isGameOver)
-        {
-            if (sfx.isPlaying && sfx.clip == AudioManager.instance.footstepClip)
-                sfx.Stop();
-            return;
-        }
-
-        if (isMoving)
-        {
-            if (sfx.clip != AudioManager.instance.footstepClip || !sfx.isPlaying)
-            {
-                AudioManager.instance.PlayFootstepLoop();
-
-            }
-        }
-        else
-        {
-            if (sfx.clip == AudioManager.instance.footstepClip && sfx.isPlaying)
-                sfx.Stop();
-        }
-    }
 
 
     public float GetDashCharge()
     {
         return currentDashEnergy;
     }
-
+     
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDashing && other.CompareTag("Enemy"))

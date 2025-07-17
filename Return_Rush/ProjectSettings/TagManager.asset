@@ -11,6 +11,7 @@ TagManager:
   - 30
   - 50
   - 40
+  - Audio
   layers:
   - Default
   - TransparentFX

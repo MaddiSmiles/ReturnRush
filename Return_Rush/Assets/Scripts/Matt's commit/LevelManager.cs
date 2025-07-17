@@ -17,14 +17,6 @@ public class LevelManager : MonoBehaviour
 
     void Awake()
     {
-        // Reset game over flag
-        if (AudioManager.instance != null)
-        {
-            AudioManager.instance.isGameOver = false;
-            AudioManager.instance.PlayMusic(AudioManager.instance.backgroundMusic);
-            //AudioManager.instance.PlaySFX(AudioManager.instance.whistleClip);
-        }
-
         StartLevel();
     }
 
@@ -63,11 +55,6 @@ public class LevelManager : MonoBehaviour
         currentLevel++;
         Debug.Log("Current Level: " + currentLevel);
         ScoreManager.instance.addScore();
-
-        // Play whistle first
-        if (AudioManager.instance != null)
-            AudioManager.instance.PlayWhistleSFX();
-
 
         // Delay level start slightly to let the whistle play
         StartCoroutine(DelayedStartLevel());

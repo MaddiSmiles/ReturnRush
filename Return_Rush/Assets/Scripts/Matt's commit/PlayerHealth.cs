@@ -60,19 +60,6 @@ public class PlayerHealth : MonoBehaviour
         isTackled = true;
         Debug.Log("Player has been tackled!");
 
-        if (AudioManager.instance != null)
-        {
-            AudioManager audio = AudioManager.instance;
-
-            // Play tackle SFX BEFORE setting game over
-            audio.PlayTackleSFX();
-
-
-            // Now mark game over and stop looping/background sounds
-            audio.isGameOver = true;
-            audio.StopMusic();
-            audio.StopLoopingSFX(audio.footstepClip);
-        }
 
         Time.timeScale = 0;
         gameOverScreen.Setup();
