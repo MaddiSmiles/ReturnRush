@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,15 +22,15 @@ public class Tutorial_triggers : MonoBehaviour
         }
         if (other.CompareTag("30"))
         {
-            movement.SetActive(true);
+            dash.SetActive(true);
         }
         if (other.CompareTag("50"))
         {
-            movement.SetActive(true);
+            enemy_intruct.SetActive(true);
         }
         if (other.CompareTag("40"))
         {
-            movement.SetActive(true);
+            final_words.SetActive(true);
         }
     }
 }
