@@ -2000,9 +2000,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Press Q
 
-    to
+    or Shift
 
-    Dash'
+    to Dash'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5291948a0cc66bd4fa13abf0e3ae39ed, type: 2}
   m_sharedMaterial: {fileID: 2026971699413104307, guid: 5291948a0cc66bd4fa13abf0e3ae39ed, type: 2}
@@ -6546,7 +6546,11 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: f009807ecb8fda44fad2d3cafd057695, type: 3}
     - target: {fileID: 6423609454521313615, guid: b43081ecea4e79d4487c5a53778bcbc3, type: 3}
       propertyPath: dashPower
-      value: 10
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423609454521313615, guid: b43081ecea4e79d4487c5a53778bcbc3, type: 3}
+      propertyPath: moveSpeed
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6423609454521313615, guid: b43081ecea4e79d4487c5a53778bcbc3, type: 3}
       propertyPath: footstepClip
@@ -6558,7 +6562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6423609454521313615, guid: b43081ecea4e79d4487c5a53778bcbc3, type: 3}
       propertyPath: dashRechargeRate
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 6423609454521313615, guid: b43081ecea4e79d4487c5a53778bcbc3, type: 3}
       propertyPath: footstepAudioSource
