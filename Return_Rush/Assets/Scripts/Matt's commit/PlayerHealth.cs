@@ -11,6 +11,13 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip tackledSound;
 
+    AudioManager audioManager;
+
+    private void Awake()
+    {
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+    }
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -60,6 +67,7 @@ public class PlayerHealth : MonoBehaviour
         isTackled = true;
         Debug.Log("Player has been tackled!");
 
+        audioManager.PlaySFX(audioManager.tackle);
 
         Time.timeScale = 0;
         gameOverScreen.Setup();

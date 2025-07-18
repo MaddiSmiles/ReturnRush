@@ -14,6 +14,8 @@ public class LevelManager : MonoBehaviour
     protected int currentLevel = 1;
     private float baseEnemySpeed = 3f;
 
+    AudioManager audioManager;
+
 
     void Awake()
     {
@@ -26,6 +28,9 @@ public class LevelManager : MonoBehaviour
     {
         // Reset player position
         player.transform.position = playerStartPoint.position;
+
+        audioManager = GameObject.FindGameObjectWithTag("Audio").GetComponent<AudioManager>();
+        audioManager.PlaySFX(audioManager.whistle);
 
         // Clear existing enemies
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))
