@@ -22,7 +22,12 @@ public class Player_Movement : MonoBehaviour
     private Vector2 lastMoveDirection;
     private bool wasMoving = false;
 
-    private AudioSource footstepSource;
+    // Add these fields at the top of your class (with the other private fields)
+    private float stepTimer = 0f;
+    private float stepInterval = 0.5f; // adjust this for faster or slower footsteps
+
+
+    //private AudioSource footstepSource;
     AudioManager audioManager;
 
     private void Awake()
@@ -37,17 +42,18 @@ public class Player_Movement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currentDashEnergy = maxDashEnergy;
         //Footstep audio
+        /*
         footstepSource = gameObject.AddComponent<AudioSource>();
         footstepSource.clip = audioManager.steps;
         footstepSource.loop = true;
         footstepSource.volume = 0.5f; // Or whatever you want
-
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Time.timeScale == 0f) return; // Prevent movement and sound while paused
+        if (Time.timeScale == 0f) return;
 
         if ((Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.LeftShift)) && canDash && currentDashEnergy >= 1f)
             StartCoroutine(Dash());
@@ -58,27 +64,24 @@ public class Player_Movement : MonoBehaviour
 
             if (moveInput != Vector2.zero)
             {
-                // Only play footstep SFX once when movement begins
-                if (!wasMoving)
-                {
-                    wasMoving = true;
+                stepTimer -= Time.deltaTime;
 
-                    if (!footstepSource.isPlaying)
-                        footstepSource.Play();
+                if (stepTimer <= 0f)
+                {
+                    audioManager.PlaySFX(audioManager.steps);
+                    stepTimer = stepInterval; // Reset the step timer
                 }
 
                 lastMoveDirection = moveInput.normalized;
+                wasMoving = true;
             }
             else
             {
-                // Stop footsteps when movement ends
-                if (wasMoving)
-                {
-                    footstepSource.Stop();
-                    wasMoving = false;
-                }
+                wasMoving = false;
+                stepTimer = 0f; // Reset step timer when not moving
             }
         }
+
 
         // Recharge dash energy over time
         if (currentDashEnergy < maxDashEnergy)
