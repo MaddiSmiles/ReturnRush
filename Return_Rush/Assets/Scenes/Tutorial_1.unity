@@ -6100,7 +6100,7 @@ MonoBehaviour:
   BGMusic: {fileID: 8300000, guid: 88a7dd94a54b6c14a9e089bcaf1bd4d0, type: 3}
   tackle: {fileID: 8300000, guid: a4bb6411f2240cc4cad8e1223a4d2b73, type: 3}
   whistle: {fileID: 8300000, guid: 7a59def3258b07b48808bbb55be3782b, type: 3}
-  steps: {fileID: 8300000, guid: 2edb5c2f0cddc184ea9ab5c391f57770, type: 3}
+  steps: {fileID: 8300000, guid: 7cbce35eccd4e244d8bf1d5af5058297, type: 3}
   dash: {fileID: 8300000, guid: f009807ecb8fda44fad2d3cafd057695, type: 3}
 --- !u!4 &2055577360
 Transform:
