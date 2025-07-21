@@ -6066,6 +6066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   amp: 0.15
+  pause: {fileID: 1174708401}
 --- !u!1 &2055577358
 GameObject:
   m_ObjectHideFlags: 0
