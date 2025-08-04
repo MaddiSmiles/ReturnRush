@@ -12,6 +12,8 @@ public class Player_Movement : MonoBehaviour
     //[SerializeField] private TrailRenderer tr;
     [SerializeField] private float maxDashEnergy = 1f;
     [SerializeField] private float dashRechargeRate = 0.25f; // per second
+    //The animator
+    public Animator animator;
     private float currentDashEnergy;
     private bool canDash = true;
     private bool isDashing = false;
@@ -22,7 +24,7 @@ public class Player_Movement : MonoBehaviour
     private Vector2 lastMoveDirection;
     private bool wasMoving = false;
 
-    // Add these fields at the top of your class (with the other private fields)
+    // Add these fields at the top of class (with the other private fields)
     private float stepTimer = 0f;
     private float stepInterval = 0.5f; // adjust this for faster or slower footsteps
 
@@ -89,6 +91,10 @@ public class Player_Movement : MonoBehaviour
             currentDashEnergy += dashRechargeRate * Time.deltaTime;
             currentDashEnergy = Mathf.Min(currentDashEnergy, maxDashEnergy);
         }
+
+        //Animating the player
+        animator.SetFloat("Speed", Mathf.Abs(moveInput.y + moveInput.x * moveSpeed));
+
     }
 
 
